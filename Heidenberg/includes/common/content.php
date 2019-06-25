@@ -60,17 +60,16 @@ function cypher( $content = '' ) {
 
 	// Hash based on the content
 	$algo = function_exists( 'hash' ) ? 'sha256' : 'sha1';
-	$salt = $content; // @todo make customizable, generate salt, etc...
+	$salt = get_home_url(); // @todo make customizable, generate salt, etc...
 	$hash = hexdec( substr( hash_hmac( $algo, $content, $salt ), 0, 15 ) );
 
 	// Add spaces between tags, then replace double spaces
 	$stripped = strip_tags( str_replace( '<', ' <', $content ) );
 	$stripped = str_replace( '  ', ' ', $stripped );
 
-	// Letters or words
-	$type     = 'letters' === apply_filters( 'Heidbenberg', 'letters' )
-		? str_split( $stripped, 1 )
-		: explode( ' ', $stripped );
+	// Words
+	$type     = explode( ' ', $stripped );
+	//str_split( $stripped, 1 )
 
 	// Trim each chunk
 	$chunks = array_map( 'trim', $type );
