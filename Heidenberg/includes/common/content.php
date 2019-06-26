@@ -36,7 +36,7 @@ add_filter( 'the_content', 'Heidenberg\\Common\\should_cypher', 8 ); // Before d
 /**
  * Filters the_content, and adds zero-width spaces between chunks using a
  * somewhat predictable and repeatable algorithm. (This means that 2 strings
- * that are exactly equal will always produce the same results.)
+ * that are exactly equal on the same site will always produce the same results.)
  *
  * @since 1.0.0
  *
@@ -74,14 +74,14 @@ function cypher( $content = '' ) {
 	// Trim each chunk
 	$chunks = array_map( 'trim', $type );
 
-	// Shuffle stripped chunks
+	// Get the maximum number of iterations
 	$count = count( $chunks );
 
 	// Use the hash to seed the RNG
-    mt_srand( $hash );
+	mt_srand( $hash );
 
 	// Loop through chunks and
-    for ( $i = 0; $i < $count; ++$i ) {
+	for ( $i = 0; $i < $count; ++$i ) {
 		$offset = mt_rand( 0, $count - 1 );
 
 		// No duplicates
@@ -90,8 +90,8 @@ function cypher( $content = '' ) {
 		}
 
 		// Combine arrays
-        $new_chunks = $new_chunks + array_slice( $chunks, $offset, 1, true );
-    }
+	 	$new_chunks = $new_chunks + array_slice( $chunks, $offset, 1, true );
+	}
 
 	// Remove empties
 	$new_chunks = array_filter( $new_chunks );
